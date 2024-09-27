@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery App</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+        }
+        /* Used to add background and color to the header */
+        #header{ 
+            --background: #ff6584; 
+            color: white;  
+        }
+        /* Modifying text design */
+        #hTitle {
+            text-align:center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        /* Modifying text design */
+        ion-label, #paymentMethod, #saveMethod {
+            color: #333;
+            font-weight: 600;
+        }
+        /* Modifying checkbox to align with the theme */
+        ion-checkbox {
+            --size: 22px;
+            --checkbox-background-checked: #ff6584;
+        }
+        /* Modifying checkbox to align with the theme */
+        ion-checkbox::part(container) {
+            border-radius: 6px;
+            border: 2px solid #ff6584;
+        }
+
+        /* Modifying button to align with the theme */
+        ion-button {
+            --border-radius: 12px;
+            --padding-start: 16px;
+            --padding-end: 16px;
+            --padding-top: 12px;
+            --padding-bottom: 12px;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+            color: #ff6584;
+            --border-color: #ff6584;
+        }
+
+        /* Modifying button when it's hovered */
+        ion-button:hover {
+            --background: #ff6584;
+            color: #f8f8f8;
+        }
+        /* Used to design the result if the checkbox is checked or saved */
+        #result {
+            background-color: #0d9a4a;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;;
+        }
+        /* Used to design the result if the checkbox is not checked or saved */
+        #notSaved {
+            background-color: #ff2d55;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+        }
+        /* Used to make sure that the button is emphasized */
+        ion-footer {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <ion-app>
+        <!-- Header -->
+        <ion-header>
+            <ion-toolbar id="header">
+                <ion-title id="hTitle" >Food Delivery Form</ion-title>
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+                <!-- ion inputs -->
+                <!-- Delivery add -->
+                <ion-item>
+                    <ion-label position="floating">Delivery Address</ion-label><br>
+                    <ion-input id="delivery" placeholder="Enter Address"></ion-input>
+                </ion-item>
+            
+                <!-- Payment select -->
+                <ion-item>
+                    <ion-select label="Payment method" id="paymentMethod" placeholder="Select payment method" interface="popover">
+                        <ion-select-option value="Cash">Cash</ion-select-option>
+                        <ion-select-option value="Credit Card">Credit Card</ion-select-option>
+                        <ion-select-option value="Paypal">Paypal</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <!-- Saving checkbox -->    
+                <ion-item>
+                    <ion-checkbox id="saveMethod">Save Payment Method</ion-checkbox>
+                </ion-item>           
+                <!-- Pricing input -->    
+                <ion-item>
+                    <ion-label position="floating">Food price</ion-label><br>
+                    <ion-input id="foodPrice" placeholder="Enter Price" id="php" type="number"></ion-input>
+                </ion-item>
+
+                <!-- Results -->
+                 <ion-card>
+                    <!-- adding id to show only the saved information -->
+                    <ion-card-header id="saved" style="display: none">
+                        <ion-card-title>Delivery Address:</ion-card-title>
+                        <ion-card-subtitle id="address"></ion-card-subtitle>
+                        <ion-card-title>Payment Method:</ion-card-title>
+                        <ion-card-subtitle id="method"></ion-card-subtitle>
+                        <ion-card-title>Food Price:</ion-card-title>
+                        <ion-card-subtitle id="price"></ion-card-subtitle><br>
+                        <ion-card-header id="result" color="primary"></ion-card-header>
+                    </ion-card-header>
+                    <!-- adding id to show warning that the information is not saved -->
+                        <ion-card-header id="notSaved" style="display: none" color="danger"></ion-card-header>
+                 </ion-card>
+        </ion-content>
+        <!-- putting the button to the footer -->
+        <ion-footer>
+            <!-- Button -->
+            <ion-button expand="block" fill="outline" onclick="triggerMode()">SUBMIT ORDER</ion-button>
+          </ion-footer>
+    </ion-app>
+
+    <script>
+        function triggerMode() {
+            // input values
+            let delivery = document.getElementById('delivery').value;
+            let paymentMethod = document.getElementById('paymentMethod').value;
+            let saveMethod = document.getElementById('saveMethod').checked;
+            let foodPrice = document.getElementById('foodPrice').value;
+
+            // condition if payment is saved
+            if(saveMethod){
+                document.getElementById('address').innerHTML = `<h4>${delivery}`;
+                document.getElementById('method').innerHTML = `<h4>${paymentMethod}`;
+                document.getElementById('price').innerHTML = `<h4>${foodPrice}`;
+                document.getElementById('result').innerText = "Payment Method will be saved.";
+                document.getElementById('saved').style.display = "block" ;
+                document.getElementById('notSaved').style.display = "none";
+            }
+            // if payment is not saved
+            else{
+                document.getElementById('notSaved').innerText = "Payment Method will not be saved." ;
+                document.getElementById('notSaved').style.display = "block" ;
+                document.getElementById('saved').style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
